@@ -1,0 +1,16 @@
+# Сборки
+[Bb]in/
+[Oo]bj/
+publish/
+*.zip
+
+# Файлы Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Прочее
+*.log
+*.tmp
