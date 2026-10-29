@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write # Важно! Дает права на создание релиза
+
 jobs:
   build:
     runs-on: windows-latest
@@ -15,7 +18,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '10.0.x' # У тебя .NET 10, ставим его
+        dotnet-version: '10.0.x'
 
     - name: Restore dependencies
       run: dotnet restore
@@ -29,8 +32,15 @@ jobs:
     - name: Zip output
       run: Compress-Archive -Path ./publish/* -DestinationPath ./ZapretDashboard.zip
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    # Этот шаг создает релиз и прикрепляет к нему ZIP
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref == 'refs/heads/main'
       with:
-        name: ZapretDashboard-ZIP
-        path: ./ZapretDashboard.zip
+        tag_name: v1.0.${{ github.run_number }} # Автоматически создает версию (v1.0.1, v1.0.2...)
+        name: Release v1.0.${{ github.run_number }}
+        draft: false
+        prerelease: false
+        files: ./ZapretDashboard.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
