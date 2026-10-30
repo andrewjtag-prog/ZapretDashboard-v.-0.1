@@ -100,18 +100,16 @@ namespace ZapretDashboard.Services
                     var psi = new ProcessStartInfo
                     {
                         FileName = "cmd.exe",
-                        Arguments = $"/c \"{batPath}\"",
+                        // Запускаем батник. Окно будет видно.
+                        Arguments = $"/c \"\"{batPath}\"\"",
                         WorkingDirectory = batDir,
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        Verb = "runas" // UAC
+                        CreateNoWindow = false, // Разрешаем окно
+                        UseShellExecute = true, // Важно для UAC
+                        Verb = "runas" // Запрос прав администратора
                     };
 
+                    // Запускаем процесс
                     _currentProcess = Process.Start(psi);
-
-                    // Ждем, чтобы winws.exe успел инициализироваться
-                    Thread.Sleep(1500);
 
                     return _currentProcess != null;
                 }

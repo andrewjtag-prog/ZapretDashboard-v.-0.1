@@ -1,8 +1,7 @@
 ﻿<Window x:Class="ZapretDashboard.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:helpers="clr-namespace:ZapretDashboard.Helpers"
-        Title="Zapret Dashboard" Height="700" Width="1300"
+        Title="Zapret Dashboard" Height="650" Width="850"
         WindowStartupLocation="CenterScreen"
         Background="#121212">
 
@@ -14,7 +13,7 @@
         <SolidColorBrush x:Key="TextMuted" Color="#888888"/>
         <SolidColorBrush x:Key="AccentColor" Color="#FFFFFF"/>
 
-        <!-- Стиль для кнопок в списке стратегий -->
+        <!-- Стиль для кнопок -->
         <Style x:Key="TerminalButton" TargetType="Button">
             <Setter Property="Background" Value="#2A2A2A"/>
             <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
@@ -44,7 +43,7 @@
             </Setter>
         </Style>
 
-        <!-- Стиль для бокового меню (как RadioButton) -->
+        <!-- Стиль для бокового меню -->
         <Style x:Key="MenuButton" TargetType="RadioButton">
             <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -79,17 +78,33 @@
             <ColumnDefinition Width="180" />
             <!-- 2. Основной контент -->
             <ColumnDefinition Width="*" />
-            <!-- 3. Панель для гифки (увеличена до 450) -->
-            <ColumnDefinition Width="450" />
         </Grid.ColumnDefinitions>
 
         <!-- БОКОВОЕ МЕНЮ -->
-        <StackPanel Grid.Column="0" Margin="0,0,15,0">
-            <TextBlock Text="MENU" Foreground="{StaticResource TextMuted}" FontFamily="Consolas" FontSize="12" Margin="15,0,0,10"/>
+        <Grid Grid.Column="0" Margin="0,0,15,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Кнопки меню -->
+                <RowDefinition Height="*"/>
+                <!-- Логотип -->
+            </Grid.RowDefinitions>
 
-            <RadioButton Content="Strategies" Style="{StaticResource MenuButton}" IsChecked="True" Checked="Menu_Strategies"/>
-            <RadioButton Content="Services" Style="{StaticResource MenuButton}" Checked="Menu_Services"/>
-        </StackPanel>
+            <!-- Кнопки меню -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="MENU" Foreground="{StaticResource TextMuted}" FontFamily="Consolas" FontSize="12" Margin="15,0,0,10"/>
+
+                <RadioButton Content="Strategies" Style="{StaticResource MenuButton}" IsChecked="True" Checked="Menu_Strategies"/>
+                <RadioButton Content="Services" Style="{StaticResource MenuButton}" Checked="Menu_Services"/>
+            </StackPanel>
+
+            <!-- Логотип (картинка) -->
+            <Image Grid.Row="1" 
+                   Source="/Resources/logo.png" 
+                   Stretch="Uniform" 
+                   VerticalAlignment="Bottom" 
+                   HorizontalAlignment="Center" 
+                   Margin="10,20,10,10" />
+        </Grid>
 
         <!-- ОСНОВНОЙ КОНТЕНТ -->
         <Grid Grid.Column="1">
@@ -111,9 +126,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <!-- Убрана красная строка DebugInfo -->
                         <TextBlock Text="Select Zapret Strategy..." Foreground="{StaticResource TextMuted}" FontFamily="Consolas" FontSize="14" VerticalAlignment="Center"/>
-                        <Button Grid.Column="1" Content="Update" Style="{StaticResource TerminalButton}" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="Update" Style="{StaticResource TerminalButton}" VerticalAlignment="Center" Command="{Binding UpdateCommand}"/>
                     </Grid>
                 </Border>
 
@@ -156,7 +170,7 @@
                 </ListBox>
             </Grid>
 
-            <!-- Секция Сервисов (изначально скрыта) -->
+            <!-- Секция Сервисов -->
             <Grid x:Name="ServicesPanel" Grid.Row="0" Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -228,14 +242,6 @@
                     </Button>
                 </Grid>
             </Border>
-        </Grid>
-
-        <!-- ПРАВАЯ ПАНЕЛЬ С ГИФКОЙ (БЕЗ РАМКИ) -->
-        <Grid Grid.Column="2" Margin="15,0,0,0">
-            <helpers:GifImage GifSource="/Resources/logo.gif" 
-                              Stretch="Uniform" 
-                              VerticalAlignment="Center" 
-                              HorizontalAlignment="Center" />
         </Grid>
     </Grid>
 </Window>
