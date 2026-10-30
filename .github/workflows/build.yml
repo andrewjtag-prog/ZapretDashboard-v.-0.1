@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write # Важно: разрешает создавать релизы
+
 jobs:
   build:
     runs-on: windows-latest
@@ -15,7 +18,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '10.0.x' # У тебя .NET 10
 
     - name: Restore dependencies
       run: dotnet restore
@@ -25,6 +28,7 @@ jobs:
 
     - name: Publish
       run: dotnet publish ZapretDashboard.csproj -c Release -r win-x64 --self-contained true -o ./publish
+
     - name: Zip output
       run: Compress-Archive -Path ./publish/* -DestinationPath ./ZapretDashboard.zip
 
@@ -33,3 +37,13 @@ jobs:
       with:
         name: ZapretDashboard-ZIP
         path: ./ZapretDashboard.zip
+
+    # СОЗДАНИЕ РЕЛИЗА
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v1.0.${{ github.run_number }}
+        name: Release v1.0.${{ github.run_number }}
+        files: ./ZapretDashboard.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
