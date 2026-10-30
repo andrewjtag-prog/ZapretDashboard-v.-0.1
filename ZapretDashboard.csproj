@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -9,11 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- Внимание: Регистр папки должен совпадать с реальным названием на GitHub! -->
 		<EmbeddedResource Include="Resources\zapret\**\*" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Resources\logo.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -24,4 +21,4 @@
 	  <Resource Include="Resources\logo.png" />
 	</ItemGroup>
 
-</Project>  
+</Project>
